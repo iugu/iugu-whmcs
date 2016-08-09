@@ -30,6 +30,14 @@ function iugu_link($params){
 		';
 		}
 	}
+    
+    	// Se não tiver nenhum item, força um item com o valor total e colocando o número da fatura
+        if($itens=="") {
+		$itens .= '<input type="hidden" name="items[][description]" value="Fatura #'.$params['invoiceid'].'">
+		<input type="hidden" name="items[][quantity]" value="1">
+		<input type="hidden" name="items[][price_cents]" value="'.$dados_invoice['total'].'">
+		';
+       }
 	
 	$code = '<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<br>
@@ -38,7 +46,9 @@ function iugu_link($params){
 		<input type="hidden" name="return_url" value="'.$params['systemurl'].'/viewinvoice.php?id='.$params['invoiceid'].'&paymentsuccess=true">
 		<input type="hidden" name="expired_url" value="'.$params['systemurl'].'/viewinvoice.php?id='.$params['invoiceid'].'&paymentfailed=true">
 		<input type="hidden" name="notification_url" value="'.$params['systemurl'].'/modules/gateways/callback/iugu.php">
+		<input type="hidden" name="name" value="'.$params['clientdetails']['firstname'].' '.$params['clientdetails']['lastname'].'">
 		<input type="hidden" name="email" value="'.$params['clientdetails']['email'].'">
+		<input type="hidden" name="cpf_cnpj" value="'.$params['clientdetails']['cpfcnpj'].'">
 		<input type="hidden" name="due_date" value="'.$vencimento.'">
 		'.$itens.'<input type="hidden" name="custom_variables[][name]" value="invoice_id">
 		<input type="hidden" name="custom_variables[][value]" value="'.$params['invoiceid'].'">
@@ -75,4 +85,3 @@ function iugu_link($params){
 $GATEWAYMODULE["iuguname"]="iugu";
 $GATEWAYMODULE["iuguvisiblename"]="Iugu v1.0";
 $GATEWAYMODULE["iugutype"]="Invoices";
-?>
